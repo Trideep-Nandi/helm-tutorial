@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata: {{ $fullname := printf "%s-%s" .Release.Name .Chart.Name | trunc 57 | trimSuffix "-" }}
+  name: {{ $fullname }}-sc
+  labels:
+    {{- include "helm-tutorial.labels" . | nindent 4}}
+{{- with .Values.storageClass -}}
+provisioner: {{- .provisioner | toString }}
+volumeBindingMode: {{- .volumeBindingMode }}
+reclaimPolicy: {{- .reclaimPolicy }}
+{{- end -}}

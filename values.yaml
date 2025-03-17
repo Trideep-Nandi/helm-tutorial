@@ -1,0 +1,33 @@
+containerImage:
+  name:
+  tag: ""
+
+service:
+  type:
+  port:
+  targetPort:
+
+resources:
+  requests:
+    cpu:
+    memory:
+  limits:
+    cpu:
+    memory:
+
+replicaCount: 1
+
+deployment:
+  create:
+
+statefulset:
+  create:
+  mountPath:
+  serviceName:
+  storage:
+
+storageClass:
+  accessModes:
+  provisioner:
+  volumeBindingMode:
+  reclaimPolicy:

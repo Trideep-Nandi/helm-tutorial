@@ -1,0 +1,24 @@
+{{- if .Values.deployment.create -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata: {{ $fullname := printf "%s-%s" .Release.Name .Chart.Name | trunc 57 | trimSuffix "-" }}
+  name: {{ $fullname }}-deploy
+  labels:
+    {{- include "helm-tutorial.labels" . | nindent 4}}
+spec:
+  selector:
+    matchLabels:
+      {{- include "helm-tutorial.selectorLabels" . | nindent 6}}
+  replicas: {{ default 1 .Values.replicaCount | int }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm-tutorial.selectorLabels" . | nindent 8}}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: "{{ .Values.containerImage.name }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{ .Values.service.port | int }}
+{{- end -}}
