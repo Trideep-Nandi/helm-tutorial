@@ -24,3 +24,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Create a fullname helper
+*/}}
+{{- define "helm-tutorial.fullname" -}}
+{{- $name := .Chart.Name -}}
+{{- if .Values.nameOverride -}}
+  {{- $name = .Values.nameOverride -}}
+{{- end -}}
+{{- $fullname := printf "%s-%s" .Release.Name $name | trunc 48 | trimSuffix "-" }}
+{{- print $fullname }}
+{{- end }}

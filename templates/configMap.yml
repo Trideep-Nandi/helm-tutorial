@@ -1,0 +1,14 @@
+{{- if .Values.configmap.data }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm-tutorial.fullname" . }}-cm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "helm-tutorial.labels" . | nindent 4 }}
+data:
+  {{- range $key, $val := .Values.configmap.data }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+{{- end }}

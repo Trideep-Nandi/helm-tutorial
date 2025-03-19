@@ -1,0 +1,30 @@
+{{- $isValid := false }}
+{{- if .Values.deployment.volumeMounts }}
+  {{- range .Values.deployment.volumeMounts }}
+    {{- if and (ne .type "emptyDir") (ne .type "hostPath") }}
+      {{- $isValid = true }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+
+{{- if and ( or $isValid .Values.resources.storage ) .Values.storage.storageClassName .Values.storage.size .Values.storage.accessModes }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "helm-tutorial.fullname" . }}-pvc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "helm-tutorial.fullname" . }}
+spec:
+  accessModes:
+    {{- range .Values.storage.accessModes }}
+    - {{ . }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.size }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  volumeName: {{ include "helm-tutorial.fullname" . }}-pv
+{{- end }}

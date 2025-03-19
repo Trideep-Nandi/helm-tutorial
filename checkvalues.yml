@@ -1,0 +1,66 @@
+nameOverride: "helm-tutorial"
+
+resources:
+  deployment: true
+  statefulset: false
+  storage: true
+  ingress: false
+  configMap: true
+  secrets: true
+  Cronjob: false
+  VirtualService: false
+  Gateway: false
+
+deployment:
+  labels:
+    app: helm-tutorial
+  replicas: 2
+  image: "nginx:latest"
+  internalPort: 80
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  env:
+    - name: ENVIRONMENT
+      value: "production"
+  volumeMounts:
+    - name: storage-volume
+      mountPath: /data
+
+storage:
+  storageClassName: "standard"
+  accessModes:
+    - ReadWriteOnce
+  size: "1Gi"
+  reclaimpolicy: "Retain"
+  nfs:
+    enabled: false
+    path: ""
+    server: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  nodePort: null
+
+ingress:
+  enabled: true
+  host: "example.local"
+  path: "/"
+  pathType: "Prefix"
+  ingressClassName: "nginx"
+
+configmap:
+  data:
+    config.json: |
+      {
+        "key": "value"
+      }
+
+secrets:
+  data:
+    SECRET_KEY: "supersecretkey"

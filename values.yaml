@@ -1,33 +1,49 @@
-containerImage:
-  name:
-  tag: ""
+nameOverride:
+
+resources:
+  deployment:
+  statefulset:
+  storage:
+  ingress:
+  configMap:
+  secrets:
+  Cronjob:
+  VirtualService:
+  Gateway:
+
+deployment:
+  labels: {}
+  replicas:
+  image: ""
+  internalPort:
+  resources: {}
+  env: {}
+  volumeMounts: []
+
+storage:
+  storageClassName: ""
+  accessModes: []
+  size:
+  reclaimpolicy:
+  nfs:
+    enabled:
+    path:
+    server:
 
 service:
   type:
   port:
-  targetPort:
+  nodePort:
 
-resources:
-  requests:
-    cpu:
-    memory:
-  limits:
-    cpu:
-    memory:
+ingress:
+  enabled:
+  host:
+  path:
+  pathType:
+  ingressClassName:
 
-replicaCount: 1
+configmap:
+  data: {}
 
-deployment:
-  create:
-
-statefulset:
-  create:
-  mountPath:
-  serviceName:
-  storage:
-
-storageClass:
-  accessModes:
-  provisioner:
-  volumeBindingMode:
-  reclaimPolicy:
+secrets:
+  data: {}

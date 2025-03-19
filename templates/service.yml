@@ -1,0 +1,21 @@
+{{- if .Values.resources.deployment -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm-tutorial.fullname" . }}-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "helm-tutorial.labels" . | nindent 4 }}
+spec:
+  type: {{ if .Values.ingress.enabled }}ClusterIP{{ else }}{{ .Values.service.type | default "ClusterIP" }}{{ end }}
+  selector:
+    app.kubernetes.io/name: {{ include "helm-tutorial.fullname" . }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.port | default 80 }}
+      targetPort: {{ .Values.deployment.internalPort | default 80 }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+{{- end }}
